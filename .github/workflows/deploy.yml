@@ -3,7 +3,13 @@
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - 'lecture1/my-portfolio/**'
   workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 permissions:
   contents: read

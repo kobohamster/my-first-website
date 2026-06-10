@@ -1,0 +1,53 @@
+:root {
+  /* Primary Colors */
+  --color-primary:       #252220;
+  --color-primary-light: #3D3A37;
+  --color-primary-dark:  #1A1817;
+
+  /* Secondary Colors */
+  --color-secondary:       #6B6865;
+  --color-secondary-light: #A09D9A;
+  --color-secondary-dark:  #3D3A37;
+
+  --color-accent: #FFFFFF;
+
+  /* Background Colors */
+  --color-bg-primary:   #ECEAE6;
+  --color-bg-secondary: #F5F3F0;
+  --color-bg-surface:   #D4CBC0;
+
+  /* Text Colors */
+  --color-text-primary:   #1A1817;
+  --color-text-secondary: #6B6865;
+  --color-text-muted:     #A09D9A;
+
+  /* Border */
+  --color-border-strong: #252220;
+  --color-border-subtle: #D4CBC0;
+
+  /* Interactive Colors */
+  --color-button-primary:      #252220;
+  --color-button-hover:        #3D3A37;
+  --color-button-text:         #FFFFFF;
+  --color-button-ghost:        transparent;
+  --color-button-ghost-hover:  rgba(37, 34, 32, 0.06);
+  --color-button-ghost-border: #252220;
+  --color-button-disabled:     #D4CBC0;
+  --color-link:                #252220;
+  --color-link-hover:          #1A1817;
+  --color-focus-ring:          #252220;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Box, Typography, CircularProgress, IconButton, TextField, Tooltip } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { supabase } from '../lib/supabaseClient'
 
 const ACCENT = '#7C6B5A'
@@ -17,6 +18,7 @@ const GuestbookList = ({ refreshTrigger }) => {
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(0)
+  const [deletingId, setDeletingId] = useState(null)
 
   const [isAdmin, setIsAdmin] = useState(false)
   const [showPasswordInput, setShowPasswordInput] = useState(false)
@@ -29,7 +31,7 @@ const GuestbookList = ({ refreshTrigger }) => {
 
     const { data, error } = await supabase
       .from('guestbook')
-      .select('id, name, message, emoji, is_private, created_at')
+      .select('id, name, message, emoji, created_at')
       .order('created_at', { ascending: false })
       .range(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE)
 
@@ -55,6 +57,15 @@ const GuestbookList = ({ refreshTrigger }) => {
     fetchEntries()
   }
 
+  const handleDelete = async (id) => {
+    setDeletingId(id)
+    const { error } = await supabase.from('guestbook').delete().eq('id', id)
+    setDeletingId(null)
+    if (!error) {
+      setEntries((prev) => prev.filter((e) => e.id !== id))
+    }
+  }
+
   const handleAdminLogin = () => {
     if (passwordInput === import.meta.env.VITE_ADMIN_PASSWORD) {
       setIsAdmin(true)
@@ -67,16 +78,10 @@ const GuestbookList = ({ refreshTrigger }) => {
     }
   }
 
-  const handleAdminLogout = () => {
-    setIsAdmin(false)
-    setShowPasswordInput(false)
-    setPasswordInput('')
-    setPasswordError(false)
-  }
-
   const handleLockClick = () => {
     if (isAdmin) {
-      handleAdminLogout()
+      setIsAdmin(false)
+      setShowPasswordInput(false)
     } else {
       setShowPasswordInput((v) => !v)
       setPasswordError(false)
@@ -94,14 +99,7 @@ const GuestbookList = ({ refreshTrigger }) => {
 
   if (!loading && entries.length === 0) {
     return (
-      <Box
-        sx={{
-          textAlign: 'center',
-          py: 8,
-          border: '1px dashed',
-          borderColor: 'divider',
-        }}
-      >
+      <Box sx={{ textAlign: 'center', py: 8, border: '1px dashed', borderColor: 'divider' }}>
         <Typography variant="body2" sx={{ color: 'text.disabled', letterSpacing: '0.05em' }}>
           아직 방명록이 없습니다. 첫 번째로 남겨주세요 ✨
         </Typography>
@@ -111,7 +109,7 @@ const GuestbookList = ({ refreshTrigger }) => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {entries.map((entry, idx) => (
           <Box
             key={entry.id}
@@ -121,55 +119,69 @@ const GuestbookList = ({ refreshTrigger }) => {
               borderColor: 'divider',
               py: 3,
               px: { xs: 0, md: 0.5 },
+              display: 'flex',
+              gap: 1.5,
+              alignItems: 'flex-start',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-              {entry.emoji && (
-                <Typography sx={{ fontSize: '1rem', lineHeight: 1 }}>{entry.emoji}</Typography>
-              )}
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem' }}
-              >
-                {entry.name}
-              </Typography>
-              <Typography
-                variant="caption"
-                sx={{ color: 'text.disabled', ml: 'auto', flexShrink: 0 }}
-              >
-                {formatDate(entry.created_at)}
-              </Typography>
-            </Box>
-
-            {entry.is_private && !isAdmin ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                <LockOutlinedIcon sx={{ fontSize: '0.75rem', color: 'text.disabled' }} />
-                <Typography variant="caption" sx={{ color: 'text.disabled', fontStyle: 'italic' }}>
-                  비밀글입니다.
-                </Typography>
-              </Box>
-            ) : (
-              <Box>
-                {entry.is_private && isAdmin && (
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.75 }}>
-                    <LockOutlinedIcon sx={{ fontSize: '0.7rem', color: ACCENT }} />
-                    <Typography variant="caption" sx={{ color: ACCENT, fontSize: '0.7rem' }}>
-                      비밀글
-                    </Typography>
-                  </Box>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+                {entry.emoji && (
+                  <Typography sx={{ fontSize: '1rem', lineHeight: 1 }}>{entry.emoji}</Typography>
                 )}
                 <Typography
                   variant="body2"
-                  sx={{
-                    color: 'text.secondary',
-                    lineHeight: 1.7,
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word',
-                  }}
+                  sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem' }}
                 >
-                  {entry.message}
+                  {entry.name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ color: 'text.disabled', ml: 'auto', flexShrink: 0 }}
+                >
+                  {formatDate(entry.created_at)}
                 </Typography>
               </Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  lineHeight: 1.7,
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {entry.message}
+              </Typography>
+            </Box>
+
+            {isAdmin && (
+              <Tooltip title="삭제" placement="left">
+                <IconButton
+                  size="small"
+                  onClick={() => handleDelete(entry.id)}
+                  disabled={deletingId === entry.id}
+                  sx={{
+                    flexShrink: 0,
+                    mt: 0.25,
+                    p: 0.5,
+                    color: 'text.disabled',
+                    borderRadius: 0,
+                    border: '1px solid transparent',
+                    '&:hover': {
+                      color: '#c62828',
+                      borderColor: '#c62828',
+                      backgroundColor: 'transparent',
+                    },
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  {deletingId === entry.id
+                    ? <CircularProgress size={14} sx={{ color: 'text.disabled' }} />
+                    : <DeleteOutlinedIcon sx={{ fontSize: '1rem' }} />
+                  }
+                </IconButton>
+              </Tooltip>
             )}
           </Box>
         ))}
@@ -195,7 +207,7 @@ const GuestbookList = ({ refreshTrigger }) => {
         </Box>
       )}
 
-      {/* 관리자 버튼 영역 */}
+      {/* 관리자 영역 */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', mt: 3, gap: 1 }}>
         {showPasswordInput && !isAdmin && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -224,16 +236,11 @@ const GuestbookList = ({ refreshTrigger }) => {
             <Box
               onClick={handleAdminLogin}
               sx={{
-                px: 1.5,
-                py: 0.75,
-                border: '1px solid',
-                borderColor: ACCENT,
-                cursor: 'pointer',
-                fontSize: '0.75rem',
-                color: ACCENT,
-                letterSpacing: '0.05em',
+                px: 1.5, py: 0.75,
+                border: '1px solid', borderColor: ACCENT,
+                cursor: 'pointer', fontSize: '0.75rem', color: ACCENT,
+                letterSpacing: '0.05em', flexShrink: 0,
                 '&:hover': { backgroundColor: `${ACCENT}18` },
-                flexShrink: 0,
               }}
             >
               확인

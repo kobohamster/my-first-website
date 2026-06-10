@@ -4,12 +4,9 @@ import {
   Typography,
   TextField,
   Button,
-  Checkbox,
-  FormControlLabel,
   CircularProgress,
   Alert,
 } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { supabase } from '../lib/supabaseClient'
 
 const ACCENT = '#7C6B5A'
@@ -20,7 +17,6 @@ const GuestbookForm = ({ onSubmitted }) => {
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
   const [emoji, setEmoji] = useState('')
-  const [isPrivate, setIsPrivate] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -36,7 +32,6 @@ const GuestbookForm = ({ onSubmitted }) => {
       name: name.trim(),
       message: message.trim(),
       emoji: emoji || null,
-      is_private: isPrivate,
     })
 
     setLoading(false)
@@ -50,7 +45,6 @@ const GuestbookForm = ({ onSubmitted }) => {
     setName('')
     setMessage('')
     setEmoji('')
-    setIsPrivate(false)
     onSubmitted?.()
 
     setTimeout(() => setSuccess(false), 4000)
@@ -82,10 +76,7 @@ const GuestbookForm = ({ onSubmitted }) => {
       </Typography>
 
       {success && (
-        <Alert
-          severity="success"
-          sx={{ mb: 2, borderRadius: 0, fontSize: '0.8125rem' }}
-        >
+        <Alert severity="success" sx={{ mb: 2, borderRadius: 0, fontSize: '0.8125rem' }}>
           방명록이 등록되었습니다. 감사합니다! 🌟
         </Alert>
       )}
@@ -118,7 +109,6 @@ const GuestbookForm = ({ onSubmitted }) => {
           sx={fieldSx}
         />
 
-        {/* 이모지 선택 */}
         <Box>
           <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
             감정 표현 (선택)
@@ -149,29 +139,6 @@ const GuestbookForm = ({ onSubmitted }) => {
             ))}
           </Box>
         </Box>
-
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isPrivate}
-              onChange={(e) => setIsPrivate(e.target.checked)}
-              size="small"
-              sx={{
-                color: 'text.disabled',
-                '&.Mui-checked': { color: ACCENT },
-                borderRadius: 0,
-              }}
-            />
-          }
-          label={
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <LockOutlinedIcon sx={{ fontSize: '0.875rem', color: 'text.disabled' }} />
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                비밀글로 남기기 (사이트 주인만 확인)
-              </Typography>
-            </Box>
-          }
-        />
 
         <Button
           type="submit"

@@ -11,8 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Supabase Health Check
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: |
-          curl -s "${{ secrets.VITE_SUPABASE_URL }}/rest/v1/health_check?select=id&limit=1" \
-            -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+          URL=$(echo "$SUPABASE_URL" | tr -d '[:space:]')
+          KEY=$(echo "$SUPABASE_ANON_KEY" | tr -d '[:space:]')
+          curl -s "${URL}/rest/v1/" \
+            -H "apikey: ${KEY}" \
+            -H "Authorization: Bearer ${KEY}"
           echo "Supabase ping successful!"

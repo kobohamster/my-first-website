@@ -1,14 +1,6 @@
 ﻿name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [master]
-    paths-ignore:
-      - 'lecture1/my-portfolio/**'
-      - 'lecture1/mini_sns/**'
-      - '.github/workflows/deploy-portfolio.yml'
-      - '.github/workflows/deploy-mini-sns.yml'
-      - '.github/workflows/supabase-keep-alive.yml'
   workflow_dispatch:
 
 concurrency:

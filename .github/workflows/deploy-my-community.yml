@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'lecture1/my-community/**'
+      - 'lecture1/mini_sns/**'
   workflow_dispatch:
 
 jobs:
@@ -20,14 +20,14 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: lecture1/my-community/package-lock.json
+          cache-dependency-path: lecture1/mini_sns/package-lock.json
 
       - name: Install dependencies
-        working-directory: lecture1/my-community
+        working-directory: lecture1/mini_sns
         run: npm ci
 
       - name: Build
-        working-directory: lecture1/my-community
+        working-directory: lecture1/mini_sns
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
@@ -40,4 +40,4 @@ jobs:
           personal_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           external_repository: kobohamster/my-community
           publish_branch: gh-pages
-          publish_dir: lecture1/my-community/dist
+          publish_dir: lecture1/mini_sns/dist

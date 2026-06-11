@@ -46,10 +46,6 @@ jobs:
           GITHUB_ACTIONS: true
         run: npm run build
 
-      - name: Add 404.html for SPA routing
-        working-directory: lecture1/mini_sns
-        run: cp dist/index.html dist/404.html
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

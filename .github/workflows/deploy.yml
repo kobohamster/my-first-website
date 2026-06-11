@@ -6,6 +6,8 @@ on:
     paths-ignore:
       - 'lecture1/my-portfolio/**'
       - 'lecture1/mini_sns/**'
+      - '.github/workflows/deploy-portfolio.yml'
+      - '.github/workflows/deploy-mini-sns.yml'
   workflow_dispatch:
 
 concurrency:

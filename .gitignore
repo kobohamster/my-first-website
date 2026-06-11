@@ -7,6 +7,7 @@
 # Node.js
 node_modules/
 package-lock.json
+!lecture1/mini_sns/package-lock.json
 
 # 캐시
 .cache/

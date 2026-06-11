@@ -5,7 +5,7 @@ import AboutPage from './pages/AboutPage'
 import ProjectsPage from './pages/ProjectsPage'
 
 const App = () => (
-  <BrowserRouter basename="/my-portfolio">
+  <BrowserRouter basename="/my-first-website">
     <Navbar />
     <Routes>
       <Route path="/" element={<HomePage />} />

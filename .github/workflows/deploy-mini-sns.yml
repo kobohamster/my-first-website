@@ -1,11 +1,6 @@
 name: Deploy mini-sns (chocorate) to GitHub Pages
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - 'lecture1/mini_sns/**'
-      - '.github/workflows/deploy-mini-sns.yml'
   workflow_dispatch:
 
 permissions:

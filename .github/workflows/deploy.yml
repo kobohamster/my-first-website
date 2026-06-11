@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths-ignore:
       - 'lecture1/my-portfolio/**'
+      - 'lecture1/mini_sns/**'
   workflow_dispatch:
 
 concurrency:

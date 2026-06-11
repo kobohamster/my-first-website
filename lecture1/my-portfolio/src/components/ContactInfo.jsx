@@ -2,7 +2,7 @@ import { Box, Typography, IconButton, Tooltip } from '@mui/material'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
 
-const ACCENT = '#7C6B5A'
+const ACCENT = '#C9944A'
 
 const EMAIL = 'kobo0067@gmail.com'
 const GITHUB = 'https://github.com/kobohamster'

@@ -24,7 +24,7 @@ const SectionDivider = () => (
   <Divider sx={{ borderColor: 'divider' }} />
 )
 
-const ACCENT = '#7C6B5A'
+const ACCENT = '#C9944A'
 
 const HomePage = () => {
   const [refreshKey, setRefreshKey] = useState(0)
@@ -63,9 +63,6 @@ const HomePage = () => {
         >
           메인 비주얼, 이름, 간단 소개가 들어갈 예정입니다.
         </Typography>
-        <Button variant="contained" color="primary" size="large" sx={{ px: 5, py: 1.5 }}>
-          시작하기
-        </Button>
       </Container>
     </Box>
 

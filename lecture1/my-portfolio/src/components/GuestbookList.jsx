@@ -5,7 +5,7 @@ import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { supabase } from '../lib/supabaseClient'
 
-const ACCENT = '#7C6B5A'
+const ACCENT = '#C9944A'
 const PAGE_SIZE = 10
 
 const formatDate = (iso) => {
@@ -31,7 +31,7 @@ const GuestbookList = ({ refreshTrigger }) => {
 
     const { data, error } = await supabase
       .from('guestbook')
-      .select('id, name, message, emoji, created_at')
+      .select('id, name, message, created_at')
       .order('created_at', { ascending: false })
       .range(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE)
 
@@ -126,9 +126,6 @@ const GuestbookList = ({ refreshTrigger }) => {
           >
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                {entry.emoji && (
-                  <Typography sx={{ fontSize: '1rem', lineHeight: 1 }}>{entry.emoji}</Typography>
-                )}
                 <Typography
                   variant="body2"
                   sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem' }}
